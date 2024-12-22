@@ -1,12 +1,24 @@
+import asyncio
 import hashlib, subprocess, os
 from os.path import isfile
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
 
 import tgbot
 
-urlx = 'https://allstar.gg/u/k1nkiller'
+
+def main():
+    asyncio.run(start_crt(os.getenv('LINKS').split(',')))
+
+
+async def start_crt(urls: list[str]):
+    while True:
+        for url in urls:
+            start_parser_sequence(url)
+            await send_videos(os.getenv('ADMINS'))
+        await asyncio.sleep(1800)
 
 def parse_links10(url):
     driver = webdriver.Chrome()
@@ -28,15 +40,15 @@ def parse_links10(url):
 
 def check_for_new_clips(links: list):
     links_new = []
-    if not isfile("data\\links.txt"):
+    if not isfile("../data/links.txt"):
         links_new = links
     else:
-        with open("data\\links.txt", "r") as f:
-            links_old = f.readlines()
+        with open("../data/links.txt", "r") as f:
+            links_old = f.read().splitlines()
         for link in links:
             if link not in links_old:
                 links_new.append(link)
-    with open("data\\links.txt", "a") as f:
+    with open("../data/links.txt", "a") as f:
         for x in links_new:
             f.write(x + "\n")
     return links_new
@@ -53,7 +65,28 @@ def download(links: list):
             print(f"Saved as: {output_path}")
         except subprocess.CalledProcessError as e:
             print(f"Error: {e}")
+    return
 
-# download(check_for_new_clips(parse_links10(urlx)))
-for video in os.listdir("data\\videos"):
-    tgbot.video_spam(video)
+def start_parser_sequence(url):
+    download(check_for_new_clips(parse_links10(url)))
+    return
+
+async def send_videos(users):
+    for video in os.listdir("../data/videos"):
+        for each in users.split(","):
+            try:
+                print(f"Отправка видео {video} пользователю {each}")
+                await tgbot.video_newsletter(each, f"data/videos/{video}")
+            except Exception as e:
+                print(f"Ошибка отправки {video} пользователю {each}: {e}")
+        os.remove(f"data/videos/{video}")
+
+
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    admins = os.getenv('ADMINS').split(',')
+    asyncio.run(send_videos(admins))
+
+
