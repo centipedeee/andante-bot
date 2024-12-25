@@ -13,12 +13,14 @@ logging.basicConfig(level=logging.INFO)
 dp = Dispatcher()
 bot = Bot(token=os.getenv('TOKEN'))
 
+BASE_DIR, USERS_FILE_PATH = '', ''
+
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    with open("../data/users", "r") as f:
+    with open(USERS_FILE_PATH, "r") as f:
         t = f.read().splitlines()
         print(t)
-    with open("../data/users", "a") as f:
+    with open(USERS_FILE_PATH, "a") as f:
         if str(message.chat.id) not in t:
             f.write("\n" + str( message.chat.id))
     await message.answer(f"It was a mistake, {message.from_user.first_name}! You subscribed to {os.getenv('LINKS').split(',')[0].split('/')[-1]}'s highlights!")
@@ -34,6 +36,9 @@ async def video_newsletter(user_id: str, video_path: str):
 
 
 def main():
+    global BASE_DIR, USERS_FILE_PATH
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
+    USERS_FILE_PATH = os.path.join(BASE_DIR, "users")
     try:
         asyncio.run(dp.start_polling(bot))
     finally:
