@@ -20,8 +20,8 @@ async def cmd_start(message: types.Message):
         print(t)
     with open("../data/users", "a") as f:
         if str(message.chat.id) not in t:
-            f.write(str(message.chat.id))
-    await message.answer(f"Здравствуйте, {message.from_user.first_name}! Вы подписались на хайлайты Кинкиллера")
+            f.write("\n" + str( message.chat.id))
+    await message.answer(f"It was a mistake, {message.from_user.first_name}! You subscribed to {os.getenv('LINKS').split(',')[0].split('/')[-1]}'s highlights!")
 
 
 async def video_newsletter(user_id: str, video_path: str):
