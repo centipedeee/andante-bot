@@ -85,7 +85,7 @@ A Python-based automation solution designed to scrape highlights from allstar.gg
 4. Run the project:
 
    ```bash
-   python andante-bot.py
+   python andante_bot.py
    ```
 
 ---
@@ -102,7 +102,7 @@ andante-bot/
 │   ├── parser.py         # Handles web scraping and video downloading
 │   ├── tgbot.py          # Manages the Telegram bot
 ├── .env                  # Environment variables
-├── andante-bot.py        # Main entry point, runs parser & bot concurrently
+├── andante_bot.py        # Main entry point, runs parser & bot concurrently
 ├── requirements.txt      # Python dependencies
 └── README.md             # Project documentation
 ```
@@ -112,7 +112,7 @@ andante-bot/
 ## Usage
 
 - **Start the Bot**:
-  Simply run the `andante-bot.py` script. It will concurrently:
+  Simply run the `andante_bot.py` script. It will concurrently:
   - Start scraping video links from the specified URLs (with 30m cooldown by default).
   - Send videos to Telegram users who have subscribed.
 

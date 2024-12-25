@@ -1,15 +1,22 @@
-import tracemalloc, multiprocessing, os, dotenv
+"""Main file of the bot. It starts the parser and the bot itself."""
+
+import tracemalloc
+import multiprocessing
+import os
+import dotenv
 from src import parser, tgbot
 
-def check():
+
+def check() -> bool:
+    """Check if the necessary files and directories exist."""
     if 'data/users' not in os.listdir():
-        with open("data/users", "w") as f:
+        with open("data/users", "w", encoding="utf-8") as f:
             f.write("")
     if 'data/links' not in os.listdir():
-        with open("data/links", "w") as f:
+        with open("data/links", "w", encoding="utf-8") as f:
             f.write("")
     if '.env' not in os.listdir():
-        with open(".env", "w") as f:
+        with open(".env", "w", encoding="utf-8") as f:
             f.write("TOKEN=\nLINKS=\n")
     if 'videos' not in os.listdir():
         os.makedirs("videos")
